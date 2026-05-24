@@ -1,0 +1,30 @@
+#!/bin/bash
+
+echo "=================================================="
+echo "      Termux SSH Starter & Connection Guide       "
+echo "=================================================="
+
+# 1. Start the Termux SSH Server
+echo "[*] Launching Termux SSH daemon..."
+sshd
+echo "[✓] SSH Server is running."
+echo ""
+
+# 2. Gather Username and IP Address
+USER=$(whoami)
+# Filters out the local loopback (127.0.0.1) and gets your active Wi-Fi or mobile IP
+IP_ADDR=$(ifconfig | grep -Eo 'inet (addr:)?([0-9.]*)' | grep -v '127.0.0.1' | awk '{print $2}')
+
+# 3. Check if IP exists and output the exact connection string
+if [ -z "$IP_ADDR" ]; then
+    echo "[-] Warning: No active IP address found."
+    echo "    Make sure your phone is connected to Wi-Fi or a hotspot."
+else
+    echo "--------------------------------------------------"
+    echo " COPY AND PASTE THIS COMMAND ON YOUR REMOTE PC:   "
+    echo "--------------------------------------------------"
+    echo " ssh ${USER}@${IP_ADDR} -p 8022"
+    echo "--------------------------------------------------"
+fi
+
+echo "=================================================="
