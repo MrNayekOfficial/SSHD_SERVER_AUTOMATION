@@ -1,0 +1,32 @@
+#!/bin/bash
+
+echo "=================================================="
+echo "      Linux SSH Starter & Connection Guide      "
+echo "=================================================="
+
+# 1. Start the Lubuntu System SSH Server
+echo "[*] Launching system SSH daemon (may ask for your sudo password)..."
+sudo systemctl start sshd
+echo "[✓] SSH Server is running."
+echo ""
+
+# 2. Gather Username and IP Address
+USER=$(whoami)
+# Filters out the local loopback (127.0.0.1) and gets your active Wi-Fi or Ethernet IP
+IP_ADDR=$(ifconfig | grep -Eo 'inet (addr:)?([0-9.]*)' | grep -v '127.0.0.1' | awk '{print $2}')
+
+# 3. Check if IP exists and output the exact connection string
+if [ -z "$IP_ADDR" ]; then
+    echo "[-] Warning: No active IP address found."
+    echo "    Make sure your Lubuntu machine is connected to Wi-Fi or an Ethernet cable."
+else
+    echo "--------------------------------------------------"
+    echo " COPY AND PASTE THIS COMMAND ON YOUR REMOTE DEVICE:"
+    echo "--------------------------------------------------"
+    echo " ssh ${USER}@${IP_ADDR}"
+    echo "--------------------------------------------------"
+    echo " Note: Since Lubuntu uses the standard port 22,   "
+    echo " you do not need to specify a '-p' port flag!      "
+fi
+
+echo "=================================================="
